@@ -12,3 +12,14 @@ Example header gaurd:
 
 #endif
 ```
+
+# Teensy Config
+- Teensy pin 24 is the I2C clock line (SCL)
+- Teensy pin 25 is the I2C data line (SDA)
+- Power and ground up to you, but I use G pin next to pin 0 for GND and 3V pin next to pin 23 for VIN.
+
+
+<img width="1273" height="684" alt="teensy imu pinout" src="https://github.com/user-attachments/assets/2cfdc6de-a39c-47fe-a94a-c5fed835de24" />
+Teensy image credit to pjrc.com
+
+IMU image credit to Adafruit
