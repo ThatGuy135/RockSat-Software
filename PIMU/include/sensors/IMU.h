@@ -27,10 +27,14 @@ public:
     sensors_event_t temp;
     
     /// Try to connect to the IMU
-    /// @param retryDefault 
-    /// @return 
+    /// @param retryDefault The starting value for how many attempts to try to connect.
+    /// @return True if connected.
     bool connect_to_imu(int retryDefault = 0);
+    
+    /// @brief Configure the settings for the IMU.
     void configure_imu();
+    
+    /// @brief The loop for the IMU to collect data.
     void imu_loop();
     
 };

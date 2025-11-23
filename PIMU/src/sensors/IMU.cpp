@@ -57,7 +57,7 @@ bool IMU::connect_to_imu(int retryDefault)
 void IMU::configure_imu() 
 {
     // Measure up to 30 Gs
-    imu.setAccelRange(ICM20649_ACCEL_RANGE_16_G);
+    imu.setAccelRange(ICM20649_ACCEL_RANGE_30_G);
     // 500 degrees per secoond.
     imu.setGyroRange(ICM20649_GYRO_RANGE_500_DPS);
     
