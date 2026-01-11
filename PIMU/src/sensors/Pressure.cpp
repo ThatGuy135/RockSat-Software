@@ -36,6 +36,7 @@ void Pressure::sensor_loop()
         SerialUSB.printf("Pressure: %f Pa\n", pressureReading);
     }
     else 
+    
     {
         // Try to connect once more while looping to try and salvage the IMU.
         SerialUSB.print("Attempting to connect to pressure in main loop...");

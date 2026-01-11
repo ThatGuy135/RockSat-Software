@@ -56,7 +56,7 @@ void loop()
 bool setup_serial() 
 {
     // Try to connect to USB Serial.
-    SerialUSB.begin(BAUD_RATE);
+    SerialUSB.begin(BAUD_RATE_RSX);
     
     // Prevent an infinate loop by setting an upper bound.
     int safetyCount = 0;
