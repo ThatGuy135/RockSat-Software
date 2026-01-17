@@ -21,7 +21,7 @@ void MPRLS::configure_sensor()
     
 }
 
-void MPRLS::sensor_loop() 
+String MPRLS::sensor_loop() 
 {
     if (pressureConnected) 
     {        
@@ -36,4 +36,5 @@ void MPRLS::sensor_loop()
         // Pass in RETRY_MAX - 1 to only try once.
         connect_to_sensor(RETRY_MAX - 1);
     }
+    return String("");
 }

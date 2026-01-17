@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "sensors/IMU.h"
 #include "sensors/Pressure.h"
+#include <DualSD.h>
 
 /// If the serial did not connect.
 bool faultySerial = false;
@@ -12,8 +13,12 @@ bool faultyIMU = false;
 IMU imu;
 Pressure pressure = Pressure();
 
+DualSD dualSd;
+
 void setup()
 {
+    pinMode(TE_PIN, INPUT);
+
     // Setup serial.
     if (setup_serial()) 
     {
@@ -41,12 +46,23 @@ void setup()
     {
         SerialUSB.println("IMU not connected. Moving on without IMU :(");
     }
+    
+    int connectedCount = dualSd.begin(BUILTIN_SDCARD, EXTERNAL_SD_CS);
+    if (connectedCount < 2)
+        SerialUSB.printf("ONE OR MORE SD CARDS COULD NOT CONNECT!! Number of SD cards connected: %i.\n", connectedCount);
+    dualSd.initializeFiles("seconds_after_power,pressure_Pa,accel_x_m/s/s,accel_y_m/s/s,accel_z_m/s/s,gyro_x_rad/s,gyro_y_rad/s,gyro_z_rad/s,timed_event_detected_bool");
 }
 
 void loop() 
 {
-    imu.imu_loop();
-    pressure.sensor_loop();
+    String imuStr = imu.imu_loop();
+    String pressStr = pressure.sensor_loop();
+    
+    int te = digitalRead(TE_PIN);
+    
+    String combinedCsv = String(millis() / 1000.0).append(pressStr).append(imuStr).append(",").append(te);
+    dualSd.write(combinedCsv);
+    
     delay(LOOP_DELAY);
 }
 

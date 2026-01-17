@@ -20,7 +20,7 @@ public:
 
     bool connect_to_sensor(int retryDefault = 0) override;    
     void configure_sensor() override;
-    void sensor_loop() override;
+    String sensor_loop() override;
 };
 
 

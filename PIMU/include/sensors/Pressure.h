@@ -4,7 +4,7 @@
 #include "defines.h"
 #include <Wire.h>
 #include "Sensor.h"
-#include <Adafruit_BME280.h>
+#include <Adafruit_BMP280.h>
 
 
 class Pressure : public Sensor
@@ -12,7 +12,7 @@ class Pressure : public Sensor
   
 public:
     /// @brief The adafruit implementation.
-    Adafruit_BME280 pressure;
+    Adafruit_BMP280 pressure;
     /// @brief The I2C address of this pressure sensor.
     const uint8_t address = 0x18;
     /// @brief If the I2C was successful in connecting.
@@ -22,7 +22,7 @@ public:
 
     bool connect_to_sensor(int retryDefault = 0) override;    
     void configure_sensor() override;
-    void sensor_loop() override;
+    String sensor_loop() override;
 };
 
 

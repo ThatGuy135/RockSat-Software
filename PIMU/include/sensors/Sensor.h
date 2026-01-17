@@ -14,7 +14,7 @@ public:
     virtual void configure_sensor() = 0;
     
     /// @brief The loop function for handling logic.
-    virtual void sensor_loop() = 0;
+    virtual String sensor_loop() = 0;
 };
 
 
