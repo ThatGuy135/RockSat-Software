@@ -19,4 +19,9 @@
 /// The pin for the timed event.
 #define TE_PIN 33
 
+/// The external testing serial.
+#define EXT_SERIAL Serial8
+
+//#define PRINT_TO_CONSOLE
+
 #endif
