@@ -7,7 +7,7 @@ DualSD DualSDManager;
 
 void setup(){
 
-  Serial.begin(115200);
+  // Serial.begin(115200);
   LOGGER.begin(&DualSDManager);
 
   while (!Serial){
