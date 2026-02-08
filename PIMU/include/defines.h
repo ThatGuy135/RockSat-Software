@@ -22,6 +22,7 @@
 /// The external testing serial.
 #define EXT_SERIAL Serial8
 
+/// Extra debugging
 //#define PRINT_TO_CONSOLE
 
 #endif

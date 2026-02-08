@@ -30,15 +30,9 @@ void setup()
     if (connectedCount < 2)
         LOGGER.printf("ONE OR MORE SD CARDS COULD NOT CONNECT!! Number of SD cards connected: %i.\n", connectedCount);
 
+    // This will save the first line as a CSV header.
     createCSVHeader();
 
-    // Setup serial.
-    // if (setup_serial()) 
-    // {
-    //     // Should be connected.
-    //     LOGGER.println("Connected to the serial.");
-    // }
-    
     // Setup pressure
     if (pressure.connect_to_sensor()) 
     {
@@ -78,26 +72,6 @@ void loop()
     
     delay(LOOP_DELAY);
 }
-
-
-// /// Start the serial connection.
-// /// @return True if connected.
-// bool setup_serial() 
-// {
-//     // Try to connect to USB Serial.
-//     SerialUSB.begin(BAUD_RATE_RSX);
-    
-//     // Prevent an infinate loop by setting an upper bound.
-//     int safetyCount = 0;
-//     while (!SerialUSB && safetyCount < RETRY_MAX) 
-//     {
-//         delay(10);
-//         safetyCount++;
-//     }
-    
-//     faultySerial = safetyCount >= RETRY_MAX;
-//     return !faultySerial;
-// }
 
 /// @brief The CSV header string
 void createCSVHeader() 
