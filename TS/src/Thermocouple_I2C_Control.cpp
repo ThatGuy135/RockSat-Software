@@ -3,6 +3,7 @@
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
 #include <Adafruit_MCP9600.h>
+#include <ThreeWayLogger.h>
 
 //Amplifiers on I2C Bus 1:
 Adafruit_MCP9600 Amp1;
@@ -19,6 +20,11 @@ Adafruit_MCP9600 Amp5;
 
 const uint8_t Address4 = 0x67; //No jump
 const uint8_t Address5 = 0x65; //J2
+
+//initialize DualSD manager
+DualSD DualSDManager;
+
+void createCSVHeader();
 
 void initializeI2C1(){
 
@@ -80,6 +86,23 @@ void initializeI2C2(){
   Serial.println("I2C_2 Established");
 }
 
+String getHotJunctionString(){
+  String hotJunctionString;
+
+  hotJunctionString.append(Amp1.readThermocouple());
+  hotJunctionString.append(",");
+  hotJunctionString.append(Amp2.readThermocouple());
+  hotJunctionString.append(",");
+  hotJunctionString.append(Amp3.readThermocouple());
+  hotJunctionString.append(",");
+  hotJunctionString.append(Amp4.readThermocouple());
+  hotJunctionString.append(",");
+  hotJunctionString.append(Amp5.readThermocouple());
+  hotJunctionString.append(",");
+
+  return hotJunctionString;
+}
+
 void printHotJunctions(){
   Serial.println("Hot Junctions:");
 
@@ -92,6 +115,23 @@ void printHotJunctions(){
   Serial.printf("Five: %0.2f\n", Amp5.readThermocouple());
 }
 
+String getColdJunctionString(){
+  String coldJunctionString;
+
+  coldJunctionString.append(Amp1.readAmbient());
+  coldJunctionString.append(",");
+  coldJunctionString.append(Amp2.readAmbient());
+  coldJunctionString.append(",");
+  coldJunctionString.append(Amp3.readAmbient());
+  coldJunctionString.append(",");
+  coldJunctionString.append(Amp4.readAmbient());
+  coldJunctionString.append(",");
+  coldJunctionString.append(Amp5.readAmbient());
+  coldJunctionString.append(",");
+
+  return coldJunctionString;
+}
+
 void printColdJunctions(){
   Serial.println("Cold Junctions:");
 
@@ -102,6 +142,23 @@ void printColdJunctions(){
   //I2C Bus 2:
   Serial.printf("Four: %0.2f\n", Amp4.readAmbient());
   Serial.printf("Five: %0.2f\n", Amp5.readAmbient());
+}
+
+String getADC(){
+  String ADC;
+
+  ADC.append(Amp1.readADC());
+  ADC.append(",");
+  ADC.append(Amp2.readADC());
+  ADC.append(",");
+  ADC.append(Amp3.readADC());
+  ADC.append(",");
+  ADC.append(Amp4.readADC());
+  ADC.append(",");
+  ADC.append(Amp5.readADC());
+  ADC.append(",");
+
+  return ADC;
 }
 
 void printADCs(){
@@ -149,4 +206,12 @@ void printAMPnum(int num){
     Serial.println("Invalid thermocouple selected");
     break;
   }
+}
+
+String getThermocoupleData(){
+  return getHotJunctionString().append(getColdJunctionString()).append(getADC());
+}
+
+void createCSVHeader(){
+  DualSDManager.initializeFiles("seconds_after_power,hot_junction_1,hot_junction_2,hot_junction_3,hot_junction_4,hot_junction_5,cold_junction_1,cold_junction_2,cold_junction_3,cold_junction_4,cold_junction_5,ADC_1,ADC_2,ADC_3,ADC_4,ADC_5,timed_event_detected_bool");
 }
