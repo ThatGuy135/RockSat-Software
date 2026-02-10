@@ -4,6 +4,7 @@
 #include <Adafruit_I2CRegister.h>
 #include <Adafruit_MCP9600.h>
 #include <ThreeWayLogger.h>
+#include <DualSD.h>
 
 //Amplifiers on I2C Bus 1:
 Adafruit_MCP9600 Amp1;
@@ -12,7 +13,7 @@ Adafruit_MCP9600 Amp3;
 
 const uint8_t Address1 = 0x66; //J1
 const uint8_t Address2 = 0x65; //J2
-const uint8_t Address3 = 0x67; //No Jump
+const uint8_t Address3 = 0x65; //No Jump
 
 //Amplifiers on I2C Bus 2:
 Adafruit_MCP9600 Amp4;
@@ -21,40 +22,52 @@ Adafruit_MCP9600 Amp5;
 const uint8_t Address4 = 0x67; //No jump
 const uint8_t Address5 = 0x65; //J2
 
-//initialize DualSD manager
-DualSD DualSDManager;
-
-void createCSVHeader();
-
 void initializeI2C1(){
 
   Serial.println("Initializing I2C_1");
 
   Wire1.begin();
 
-  while (!Amp1.begin(Address1, &Wire1)){
+  int debounce = 0;
+
+  while (!Amp1.begin(Address1, &Wire1) && debounce < 5){
+    debounce++;
     Serial.println("Amplifier 1 not found!");
-    delay(100);
+    delay(500);
   }
 
+    debounce = 0;
+
+  if (Amp1.begin(Address1, &Wire1)){
     Amp1.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp1.setThermocoupleType(MCP9600_TYPE_N);
+  }
 
-  while (!Amp2.begin(Address2, &Wire1)){
+  while (!Amp2.begin(Address2, &Wire1) && debounce < 5){
+    debounce++;
     Serial.println("Amplifier 2 not found!");
-    delay(100);
+    delay(500);
   }
 
-  Amp2.setADCresolution(MCP9600_ADCRESOLUTION_18);
-  Amp2.setThermocoupleType(MCP9600_TYPE_N);
+  debounce = 0;
 
-  while (!Amp3.begin(Address3, &Wire1)){
+  if (Amp2.begin(Address2, &Wire1)){
+    Amp2.setADCresolution(MCP9600_ADCRESOLUTION_18);
+    Amp2.setThermocoupleType(MCP9600_TYPE_N);
+  }
+
+  while (!Amp3.begin(Address3, &Wire1) && debounce < 5){
+    debounce++;
     Serial.println("Amplifier 3 not found!");
-    delay(100);
+    delay(500);
   }
 
-  Amp3.setADCresolution(MCP9600_ADCRESOLUTION_18);
-  Amp3.setThermocoupleType(MCP9600_TYPE_N);
+  debounce = 0;
+
+  if (Amp3.begin(Address3, &Wire1)){
+    Amp3.setADCresolution(MCP9600_ADCRESOLUTION_18);
+    Amp3.setThermocoupleType(MCP9600_TYPE_N);
+  }
 
   Serial.println("All amplifiers found!");
   Serial.println("I2C_1 Established");
@@ -62,25 +75,31 @@ void initializeI2C1(){
 
 void initializeI2C2(){
 
+  int debounce = 0;
+
   Serial.println("Initializing I2C_2");
   
   Wire2.begin();
 
-  while (!Amp4.begin(Address4, &Wire2)){
+  while (!Amp4.begin(Address4, &Wire2) && debounce < 5){
     Serial.println("Amplifier 4 not found");
-    delay(100);
+    delay(500);
   }
 
-  Amp4.setADCresolution(MCP9600_ADCRESOLUTION_18);
-  Amp4.setThermocoupleType(MCP9600_TYPE_N);
+  if (Amp4.begin(Address4, &Wire2)){
+    Amp4.setADCresolution(MCP9600_ADCRESOLUTION_18);
+    Amp4.setThermocoupleType(MCP9600_TYPE_N);
+  }
 
-  while (!Amp5.begin(Address5, &Wire2)){
+  while (!Amp5.begin(Address5, &Wire2) && debounce < 5){
     Serial.println("Amplifier 5 not found!");
-    delay(100);  
+    delay(500);  
   }
 
-  Amp5.setADCresolution(MCP9600_ADCRESOLUTION_18);
-  Amp5.setThermocoupleType(MCP9600_TYPE_N);
+  if (Amp5.begin(Address5, &Wire2)){
+    Amp5.setADCresolution(MCP9600_ADCRESOLUTION_18);
+    Amp5.setThermocoupleType(MCP9600_TYPE_N);
+  }
 
   Serial.println("All amplifiers found!");
   Serial.println("I2C_2 Established");
@@ -212,6 +231,3 @@ String getThermocoupleData(){
   return getHotJunctionString().append(getColdJunctionString()).append(getADC());
 }
 
-void createCSVHeader(){
-  DualSDManager.initializeFiles("seconds_after_power,hot_junction_1,hot_junction_2,hot_junction_3,hot_junction_4,hot_junction_5,cold_junction_1,cold_junction_2,cold_junction_3,cold_junction_4,cold_junction_5,ADC_1,ADC_2,ADC_3,ADC_4,ADC_5,timed_event_detected_bool");
-}

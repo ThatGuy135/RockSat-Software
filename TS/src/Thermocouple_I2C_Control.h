@@ -1,8 +1,6 @@
 #ifndef Thermocouple_I2C_Control
 #define Thermocouple_I2C_Control
 
-extern DualSD DualSDManager;
-
 String getHotJunction();
 
 String getColdJunction();
