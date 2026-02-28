@@ -118,6 +118,7 @@ void initializeI2C2(){
 
   Serial.println("All amplifiers found!");
   Serial.println("I2C_2 Established");
+  LOGGER.printf("%0f : I2C_2 Initialized", millis() / 1000);
 }
 
 String getHotJunctionString(){
