@@ -47,7 +47,6 @@ void loop(){
   int TE = digitalRead(TE_PIN);
 
   Serial.println("Saving Data");
-
   //Save Data:
   double timeInSeconds = millis()/1000.0;
   String combinedCSV = String(timeInSeconds).append(",").append(thermocoupleData).append(TE);

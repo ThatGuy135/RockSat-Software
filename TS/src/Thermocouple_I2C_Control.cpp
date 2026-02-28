@@ -22,9 +22,17 @@ Adafruit_MCP9600 Amp5;
 const uint8_t Address4 = 0x67; //No jump
 const uint8_t Address5 = 0x65; //J2
 
+bool ADDR_ONE_CHECK = false;
+bool ADDR_TWO_CHECK = false;
+bool ADDR_THREE_CHECK = false;
+bool ADDR_FOUR_CHECK = false;
+bool ADDR_FIVE_CHECK = false;
+
+
 void initializeI2C1(){
 
   Serial.println("Initializing I2C_1");
+  LOGGER.println("Initializing I2C_1");
 
   Wire1.begin();
 
@@ -33,12 +41,14 @@ void initializeI2C1(){
   while (!Amp1.begin(Address1, &Wire1) && debounce < 5){
     debounce++;
     Serial.println("Amplifier 1 not found!");
+    LOGGER.println("Amplifier 1 not found!");
     delay(500);
   }
 
     debounce = 0;
 
   if (Amp1.begin(Address1, &Wire1)){
+    ADDR_ONE_CHECK = true;
     Amp1.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp1.setThermocoupleType(MCP9600_TYPE_N);
   }
@@ -52,6 +62,7 @@ void initializeI2C1(){
   debounce = 0;
 
   if (Amp2.begin(Address2, &Wire1)){
+    ADDR_TWO_CHECK = true;
     Amp2.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp2.setThermocoupleType(MCP9600_TYPE_N);
   }
@@ -65,12 +76,14 @@ void initializeI2C1(){
   debounce = 0;
 
   if (Amp3.begin(Address3, &Wire1)){
+    ADDR_THREE_CHECK = true;
     Amp3.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp3.setThermocoupleType(MCP9600_TYPE_N);
   }
 
   Serial.println("All amplifiers found!");
   Serial.println("I2C_1 Established");
+  LOGGER.printf("%0f : I2C_1 Initialized", millis() / 1000);
 }
 
 void initializeI2C2(){
@@ -87,6 +100,7 @@ void initializeI2C2(){
   }
 
   if (Amp4.begin(Address4, &Wire2)){
+    ADDR_FOUR_CHECK = true;
     Amp4.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp4.setThermocoupleType(MCP9600_TYPE_N);
   }
@@ -97,6 +111,7 @@ void initializeI2C2(){
   }
 
   if (Amp5.begin(Address5, &Wire2)){
+    ADDR_FIVE_CHECK = true;
     Amp5.setADCresolution(MCP9600_ADCRESOLUTION_18);
     Amp5.setThermocoupleType(MCP9600_TYPE_N);
   }
